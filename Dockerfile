@@ -26,6 +26,12 @@ RUN useradd -m -d /home/dev -s /bin/bash dev
 RUN echo "dev:dev" | chpasswd
 RUN usermod -aG sudo dev  
 #-------------------------------------------------
+# Install Terraform
+RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
+RUN apt-add-repository "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+RUN apt-get update && \
+    apt-get install --yes terraform=1.4.6-1
+#-------------------------------------------------
 # Clean image
 RUN apt-get clean autoclean && apt-get purge -y --auto-remove && rm -rf /var/lib/{apt,dpkg,cache,log}/
 CMD ["/bin/bash"]
